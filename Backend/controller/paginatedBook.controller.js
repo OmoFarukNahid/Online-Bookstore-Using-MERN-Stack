@@ -1,19 +1,9 @@
-import Book from "../model/book.model.js"
+// backend/controller/paginatedBook.controller.js
+import Book from "../model/book.model.js";
 
-// Keep your original function for other parts of your app
-export const getBook = async (req, res) => {
-  try {
-    const book = await Book.find();
-    res.status(200).json(book);
-  } catch (error) {
-    console.log("Error fetching books:", error);
-    res.status(500).json(error);
-  }
-};
-// Add this new function for pagination
 export const getPaginatedBooks = async (req, res) => {
   try {
-    const { page = 1, limit = 12 } = req.query;
+    const { page = 1, limit = 12 } = req.query; // Default to page 1, 12 items per page
     const skip = (page - 1) * limit;
 
     const books = await Book.find().skip(skip).limit(parseInt(limit));

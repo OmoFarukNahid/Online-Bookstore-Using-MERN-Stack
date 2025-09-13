@@ -6,32 +6,30 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io"; // Import eye icons
 import imageCompression from "browser-image-compression";
 
-
-
 function SignUp() {
   // State for password visibility
-  // inside SignUp component (top of function)
   const [previewImage, setPreviewImage] = useState(null);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [signupError, setSignupError] = useState("");
   const [signupSuccess, setSignupSuccess] = useState("");
+  const fileInputRef = useRef(null);
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    setValue
+    setValue,
+    trigger
   } = useForm();
   // ⭐ added: Cloudinary details
   const CLOUD_NAME = "dzdr5eyt2";   // replace with your cloud name
-  const UPLOAD_PRESET = "demotest";       // your unsigned preset
+  const UPLOAD_PRESET = "userbookstrap";       // your unsigned preset
 
   // ⭐ added: upload function
   const uploadImageToCloudinary = async (file) => {
@@ -97,6 +95,7 @@ function SignUp() {
         setValue("password", "");
         setValue("confirmPassword", "");
         setValue("profilePicture", null); // ⭐ reset file
+        setPreviewImage(null); // Reset preview image
         // Redirect to login after a short delay
         setTimeout(() => {
           document.getElementById('my_modal_45').showModal();
@@ -112,6 +111,23 @@ function SignUp() {
 
   const handleDateChange = (date) => {
     setValue("birthDate", date); // Update react-hook-form value
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type only (size will be handled by compression)
+      if (!file.type.startsWith("image/")) {
+        setSignupError("Please select an image file");
+        return;
+      }
+
+      // Set the file value for react-hook-form
+      setValue("profilePicture", [file], { shouldValidate: true });
+      setPreviewImage(URL.createObjectURL(file));
+      setSignupError(""); // Clear any previous errors
+    }
   };
 
   return (
@@ -131,38 +147,14 @@ function SignUp() {
             </div>
 
             {/* Form */}
-            {/* ⭐ Profile Picture */}
             {/* Profile Avatar Upload */}
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-8 mt-6">
               <input
                 type="file"
                 accept="image/*"
                 id="profilePicture"
-                {...register("profilePicture", {
-                  required: "Profile picture is required",
-                  validate: {
-                    fileSize: (files) =>
-                      !files[0] || files[0].size <= 5 * 1024 * 1024 || "Max file size is 5MB",
-                    fileType: (files) =>
-                      !files[0] || files[0].type.startsWith("image/") || "Only image files are allowed",
-                  },
-                })}
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    // Validate file type and size
-                    if (!file.type.startsWith("image/")) {
-                      setSignupError("Please select an image file");
-                      return;
-                    }
-                    if (file.size > 5 * 1024 * 1024) {
-                      setSignupError("Image must be smaller than 5MB");
-                      return;
-                    }
-                    setPreviewImage(URL.createObjectURL(file));
-                    setSignupError(""); // Clear any previous errors
-                  }
-                }}
+                ref={fileInputRef}
+                onChange={handleFileChange}
                 className="hidden"
               />
 
@@ -173,9 +165,6 @@ function SignUp() {
               >
                 {/* Circular Frame with Gradient Border */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#2d809c] to-orange-300 p-1.5 ">
-
-
-
                   <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
                     {previewImage ? (
                       <img
@@ -204,10 +193,24 @@ function SignUp() {
                   </div>
                 </div>
               </label>
+
+              {/* Hidden input for react-hook-form */}
+              <input
+                type="hidden"
+                {...register("profilePicture", {
+                  required: "Profile picture is required",
+                  validate: {
+                    // REMOVE THIS fileSize validation since you're compressing automatically
+                    fileType: (files) =>
+                      !files || !files[0] || files[0].type.startsWith("image/") || "Only image files are allowed",
+                  },
+                })}
+              />
             </div>
             {errors.profilePicture && (
               <p className="text-red-500 text-xs mt-1 text-center -mt-6 mb-4">{errors.profilePicture.message}</p>
             )}
+
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
               {/* Name */}
               <div>

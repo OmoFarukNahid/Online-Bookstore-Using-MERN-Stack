@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bookRoute from "./route/book.route.js";
 import authRoute from "./route/auth.route.js";
+import googleRoute from "./route/google.route.js"; // <-- ADD THIS LINE
+import paginatedBookRoute from "./route/paginatedBook.route.js"; // Add this
 import cors from 'cors';
 
 dotenv.config();
@@ -32,6 +34,8 @@ app.get("/api/test", (req, res) => {
 // define route
 app.use("/book", bookRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/paginated-books", paginatedBookRoute); // Add this for pagination
+app.use("/api/google-books", googleRoute); // <-- ADD THIS LINE
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
