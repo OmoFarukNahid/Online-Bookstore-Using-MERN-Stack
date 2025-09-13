@@ -1,0 +1,40 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/OmoFarukNahid/MERN-Stack-website---Online-Bookstore#readme",
+  "bugs": {
+    "url": "https://github.com/OmoFarukNahid/MERN-Stack-website---Online-Bookstore/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmoFarukNahid/MERN-Stack-website---Online-Bookstore.git"
+  },
+  "license": "ISC",
+  "author": "Nahid",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    "./*": "./*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.17.1",
+    "next-cloudinary": "^6.16.0"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

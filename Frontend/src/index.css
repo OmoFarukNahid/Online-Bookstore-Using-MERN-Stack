@@ -1,0 +1,23 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@500&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+@import "slick-carousel/slick/slick.css"; 
+@import "slick-carousel/slick/slick-theme.css";
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+.slick-dots {
+  bottom: -25px;
+}
+
+.slick-dots li button:before {
+  color: #9ca3af; /* gray-400 for inactive */
+  font-size: 12px;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #10b981; /* emerald-500 for active */
+}
